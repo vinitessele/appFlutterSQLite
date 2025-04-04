@@ -29,8 +29,12 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE contacts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        uuid TEXT UNIQUE,
         name TEXT NOT NULL,
         phone TEXT NOT NULL
+        created_at TEXT,
+        updated_at TEXT,
+        is_deleted INTEGER DEFAULT 0
       )
     ''');
   }

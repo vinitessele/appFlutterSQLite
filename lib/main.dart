@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'database_helper.dart';
 import 'contato.dart';
 
@@ -74,10 +75,18 @@ class _ContactListScreenState extends State<ContactListScreen> {
             ),
             TextButton(
               onPressed: () async {
+                final uuid = const Uuid().v4();
+                final now = DateTime.now().toIso8601String();
+
                 final newContact = Contact(
+                  uuid: uuid,
                   name: nameController.text,
                   phone: phoneController.text,
+                  createdAt: now,
+                  updatedAt: now,
+                  isDeleted: 0,
                 );
+
                 await dbHelper.insertContact(newContact);
                 _loadContacts();
                 Navigator.pop(context);
@@ -125,11 +134,18 @@ class _ContactListScreenState extends State<ContactListScreen> {
             ),
             TextButton(
               onPressed: () async {
+                final now = DateTime.now().toIso8601String();
+
                 final updatedContact = Contact(
                   id: contact.id,
+                  uuid: contact.uuid,
                   name: nameController.text,
                   phone: phoneController.text,
+                  createdAt: contact.createdAt,
+                  updatedAt: now,
+                  isDeleted: contact.isDeleted,
                 );
+
                 await dbHelper.updateContact(updatedContact);
                 _loadContacts();
                 Navigator.pop(context);
